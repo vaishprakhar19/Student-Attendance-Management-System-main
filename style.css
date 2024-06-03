@@ -131,7 +131,7 @@
 .image{
     width: 100vw;
     height: 100vh;
-    background: url("https://media.licdn.com/dms/image/C4E1BAQHAByyGBsamEg/company-background_10000/0/1634197955444/kumaununiversity_cover?e=2147483647&v=beta&t=CCr_J9_nE71n1xSCy8hbh-gdi7fdBFml6NXXWpgiA4s");
+    background: url("./background.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
