@@ -14,21 +14,23 @@
 </head>
 
 <body>
-
   <div class="studentData">
-    <form action="" id="form1">
-      <input type="text" placeholder="Name" id="name" required>
-      <input type="number" placeholder="Number" id="number" required>
-      <input type="text" placeholder="City" id="city" required>
-      <input type="number" placeholder="Roll No" id="rollNo" required>
-      <input type="submit" class="btn btn-warning">
-    </form>
+    <button class="btn btn-warning" id="showFormButton">Add Student</button>
     <a href="studentData.html"><button class="my-4 mx-4 btn btn-warning">Attendance Record</button></a>
-    <h2 style="color: white;" id="date"></h2>
+    <h3 style="color: white;  display: inline-block;" id="date"></h3>
+    <div id="formContainer" style="display: none;"> 
+      <form action="" id="form1">
+        <input type="text" placeholder="Name" id="name" required style="color: black;">
+        <input type="number" placeholder="Number" id="number" required>
+        <input type="text" placeholder="City" id="city" required>
+        <input type="number" placeholder="Roll No" id="rollNo" required>
+        <input type="submit" class="btn btn-warning">
+      </form>
+    </div>
   </div>
-  
-  
-  
+
+
+
   <table>
     <thead>
       <tr>
@@ -77,7 +79,14 @@
         displayFun(studentDataArr)
       })
 
-document.getElementById("date").innerHTML=`${new Date().toLocaleDateString()}`;
+
+    const showFormButton = document.getElementById('showFormButton');
+    const formContainer = document.getElementById('formContainer');
+
+    showFormButton.addEventListener('click', () => {
+      formContainer.style.display = 'block';
+    });
+    document.getElementById("date").innerHTML = `${new Date().toLocaleDateString()}`;
 
     function submitFun1(e) {
       document.querySelector("#tbody").innerHTML = "";
@@ -93,11 +102,11 @@ document.getElementById("date").innerHTML=`${new Date().toLocaleDateString()}`;
         city: city,
         rollNo: rollNo,
         present: 0,
-        totalClasses:0
+        totalClasses: 0
       }
 
       // db.collection('students').add(studentObj).then((docRef) => { console.log("document", docRef.id) }).catch((err) => { console.log(err); })
-      db.collection("students") .doc(studentObj.rollNo).set(studentObj);
+      db.collection("students").doc(studentObj.rollNo).set(studentObj);
       studentDataArr.push(studentObj);
       localStorage.setItem("studentData", JSON.stringify(studentDataArr));
       document.querySelector("#form1").reset();
@@ -110,7 +119,7 @@ document.getElementById("date").innerHTML=`${new Date().toLocaleDateString()}`;
       studentDataArr.sort((a, b) => a.rollNo - b.rollNo);
 
       var count = 1;
-      
+
       studentDataArr.map(function (item) {
 
         var tr = document.createElement("tr");
@@ -131,17 +140,17 @@ document.getElementById("date").innerHTML=`${new Date().toLocaleDateString()}`;
         btn1.addEventListener("click", function () {
           td6.innerHTML = "<button >Present</button>";
           db.collection("students").doc(item.rollNo).update({
-    present:firebase.firestore.FieldValue.increment(1),
-    totalClasses:firebase.firestore.FieldValue.increment(1)
-})
+            present: firebase.firestore.FieldValue.increment(1),
+            totalClasses: firebase.firestore.FieldValue.increment(1)
+          })
         });
         var btn2 = document.createElement("button");
         btn2.innerHTML = "A";
         btn2.addEventListener("click", function () {
           td6.innerHTML = "<button id='absent'>Absent</button>";
           db.collection("students").doc(item.rollNo).update({
-    totalClasses:firebase.firestore.FieldValue.increment(1)
-})
+            totalClasses: firebase.firestore.FieldValue.increment(1)
+          })
         });
         td6.classList.add("td6");
         td6.append(btn1, btn2);
