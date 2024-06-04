@@ -18,7 +18,7 @@
     <button class="btn btn-warning" id="showFormButton">Add Student</button>
     <a href="studentData.html"><button class="my-4 mx-4 btn btn-warning">Attendance Record</button></a>
     <h3 style="color: white;  display: inline-block;" id="date"></h3>
-    <div id="formContainer" style="display: none;"> 
+    <div id="formContainer" style="display: none;">
       <form action="" id="form1">
         <input type="text" placeholder="Name" id="name" required style="color: black;">
         <input type="number" placeholder="Number" id="number" required>
@@ -65,7 +65,7 @@
     });
     const db = firebaseApp.firestore();
 
-    document.getElementById("form1").addEventListener("submit", submitFun1);
+
     let studentDataArr = [];
     // var studentDataArr = JSON.parse(localStorage.getItem("studentData")) || [];
     db.collection("students")
@@ -82,12 +82,20 @@
 
     const showFormButton = document.getElementById('showFormButton');
     const formContainer = document.getElementById('formContainer');
-
+    let temp = true;
     showFormButton.addEventListener('click', () => {
-      formContainer.style.display = 'block';
+      if (temp) {
+        formContainer.style.display = 'block';
+        temp = false;
+      }
+      else {
+        formContainer.style.display = 'none';
+        temp = true;
+      }
     });
     document.getElementById("date").innerHTML = `${new Date().toLocaleDateString()}`;
 
+    document.getElementById("form1").addEventListener("submit", submitFun1);
     function submitFun1(e) {
       document.querySelector("#tbody").innerHTML = "";
       e.preventDefault();
@@ -111,7 +119,6 @@
       localStorage.setItem("studentData", JSON.stringify(studentDataArr));
       document.querySelector("#form1").reset();
       alert("Student Added Successfully");
-
       displayFun(studentDataArr)
     }
 
@@ -138,7 +145,7 @@
         var btn1 = document.createElement("button");
         btn1.innerHTML = "P";
         btn1.addEventListener("click", function () {
-          td6.innerHTML = "<button >Present</button>";
+          td6.innerHTML = "<button>Present</button>";
           db.collection("students").doc(item.rollNo).update({
             present: firebase.firestore.FieldValue.increment(1),
             totalClasses: firebase.firestore.FieldValue.increment(1)

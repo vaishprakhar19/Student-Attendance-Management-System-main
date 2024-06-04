@@ -139,8 +139,8 @@
     left:0;
     top:0;
     z-index: -5;
-    filter: blur(5px);
     filter: brightness(70%);
+    filter: blur(2px);
 }
 /* .image img{
     width: 100%;
