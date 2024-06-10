@@ -16,14 +16,21 @@
 <body>
   <div class="studentData">
     <button class="btn btn-warning" id="showFormButton">Add Student</button>
+    <button class="btn btn-warning mx-2" id="showDeleteForm">Remove Student</button>
     <a href="studentData.html"><button class="my-4 mx-4 btn btn-warning">Attendance Record</button></a>
     <h3 style="color: white;  display: inline-block;" id="date"></h3>
     <div id="formContainer" style="display: none;">
-      <form action="" id="form1">
+      <form action="" class="form" id="form1">
         <input type="text" placeholder="Name" id="name" required style="color: black;">
         <input type="number" placeholder="Number" id="number" required>
         <input type="text" placeholder="City" id="city" required>
         <input type="number" placeholder="Roll No" id="rollNo" required>
+        <input type="submit" class="btn btn-warning">
+      </form>
+    </div>
+    <div id="deleteFormContainer" style="display: none;">
+      <form action="" class="form" id="form2">
+        <input type="number" placeholder="Roll No" id="rollNoForDelete" required>
         <input type="submit" class="btn btn-warning">
       </form>
     </div>
@@ -93,8 +100,45 @@
         temp = true;
       }
     });
+    const showDeleteForm = document.getElementById('showDeleteForm');
+    const deleteFormContainer = document.getElementById('deleteFormContainer');
+    let temp2 = true;
+    showDeleteForm.addEventListener('click', () => {
+      if (temp2) {
+        deleteFormContainer.style.display = 'block';
+        temp2 = false;
+      }
+      else {
+        deleteFormContainer.style.display = 'none';
+        temp2 = true;
+      }
+    });
     document.getElementById("date").innerHTML = `${new Date().toLocaleDateString()}`;
 
+    
+    document.getElementById("form2").addEventListener("submit", deleteStudentByRollNo);
+    function deleteStudentByRollNo(e) {
+      e.preventDefault();
+      var rollNo = document.querySelector("#rollNoForDelete").value;
+      const studentRef = db.collection("students").doc(rollNo);
+      studentRef.get().then((doc) => {
+        if (doc.exists) {
+          // Document exists, proceed with deletion
+          studentRef.delete().then(() => {
+            console.log("Document successfully deleted!");
+            
+        window.location.reload();           
+          }).catch((error) => {
+            console.error("Error deleting document: ", error);
+          });
+        } else {
+          console.log("Document not found.");
+        }
+      }).catch((error) => {
+        console.error("Error getting document: ", error);
+      });
+    }
+    
     document.getElementById("form1").addEventListener("submit", submitFun1);
     function submitFun1(e) {
       document.querySelector("#tbody").innerHTML = "";

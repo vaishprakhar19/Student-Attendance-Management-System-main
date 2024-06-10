@@ -16,13 +16,6 @@
 <body>
 
     <div class="studentData">
-        <form hidden="true" id="form1">
-            <input type="text" placeholder="Name" id="name" required>
-            <input type="number" placeholder="Number" id="number" required>
-            <input type="text" placeholder="City" id="city" required>
-            <input type="number" placeholder="Roll No" id="rollNo" required>
-            <input type="submit" class="btn btn-warning">
-        </form>
         <h1 style="color:white">Student Attendance Record</h1>
     </div>
 
@@ -61,8 +54,6 @@
             appId: "1:1042911969588:web:151b263fea2e7f1817a561"
         });
         const db = firebaseApp.firestore();
-
-        document.getElementById("form1").addEventListener("submit", submitFun1);
         let studentDataArr = [];
         // var studentDataArr = JSON.parse(localStorage.getItem("studentData")) || [];
         db.collection("students")
@@ -75,32 +66,7 @@
                 })
                 displayData(studentDataArr)
             })
-        function submitFun1(e) {
-            document.querySelector("#tbody").innerHTML = "";
-            e.preventDefault();
-            var name = document.querySelector("#name").value;
-            var number = document.querySelector("#number").value;
-            var city = document.querySelector("#city").value;
-            var rollNo = document.querySelector("#rollNo").value;
-
-            var studentObj = {
-                name: name,
-                number: number,
-                city: city,
-                rollNo: rollNo,
-                present: 0,
-                totalClasses: 0
-            }
-
-            // db.collection('students').add(studentObj).then((docRef) => { console.log("document", docRef.id) }).catch((err) => { console.log(err); })
-            db.collection("students").doc(studentObj.rollNo).set(studentObj);
-            studentDataArr.push(studentObj);
-            localStorage.setItem("studentData", JSON.stringify(studentDataArr));
-            document.querySelector("#form1").reset();
-            alert("Student Added Successfully");
-
-            displayData(studentDataArr)
-        }
+       
 
         function displayData(studentDataArr) {
             studentDataArr.sort((a, b) => a.rollNo - b.rollNo);
